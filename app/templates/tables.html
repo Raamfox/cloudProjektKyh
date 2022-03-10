@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Table</title>
+
+    <link href="../static/main.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+    <h1>Sensor readings</h1>
+        <nav>
+            <ul class="nav">
+                <li><a href="{{ url_for('index') }}"> Home</a></li>
+                <li><a href="{{ url_for('tables') }}"> House sensors</a></li>
+            </ul>
+        </nav>
+    </header>
+    <table id="tempTable">
+        <tr>
+            <th>Sensor - Living Room</th>
+            <th>Sensor - Kitchen</th>
+            <th>Sensor - Bedroom</th>
+            <th>Sensor - Gaming Room</th>
+        </tr>
+        <tr>
+            <th id="sensor_liv"></th>
+            <th id="sensor_kitchen"></th>
+            <th id="sensor_bedroom"></th>
+            <th id="sensor_gaming"></th>
+        </tr>
+    </table>
+    <script src=""></script>
+    <script>
+        setInterval(getData, 10000);
+
+        function getData() {
+            fetch('http://127.0.0.1:5000/data')
+                .then(response => response.json())
+                .then(sensorObjects => {
+                    console.log(sensorObjects);
+                    let data = [];
+                    for(let item of sensorObjects) {
+                        data.push(item['temp']);
+                    }
+                    document.getElementById("sensor_liv").innerHTML = data[0];
+                    document.getElementById("sensor_kitchen").innerHTML = data[1];
+                    document.getElementById("sensor_bedroom").innerHTML = data[2];
+                    document.getElementById("sensor_gaming").innerHTML = data[3];
+                })
+        }
+    </script>
+</body>
+</html>
